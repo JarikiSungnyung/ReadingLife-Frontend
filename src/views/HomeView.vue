@@ -3,13 +3,8 @@
         <div class="box">
             <router-link :to="book.name" v-for="(book, index) in books" :key="index">
                 <div class="books">
-                    <div class="bookname">
-                        <h3>{{ book.name }}</h3>
-                    </div>
-                    <div class="bookself">
-                        <img :src="book.imgUrl" alt="bookImg" />
-                        <p>{{ book.category }}</p>
-                    </div>
+                    <img :src="book.imgUrl" alt="bookImg" />
+                    <h3>{{ book.name }}</h3>
                 </div>
             </router-link>
         </div>

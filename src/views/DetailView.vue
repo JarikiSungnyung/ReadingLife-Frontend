@@ -1,19 +1,22 @@
 <template>
-    <div class="container">
+    <div class="bookcontainer">
         <div class="bookbox">
-            <img :src="book.imgUrl" alt="" />
+            <img :src="book.imgUrl" alt="bookImg" />
             <div class="intros">
-                <h1>{{ book.name }}</h1>
-                <p>{{ book.author }}</p>
-                <p>{{ book.category }}</p>
+                <div class="intro">
+                    <h1>{{ book.name }}</h1>
+                    <p>{{ book.author }}</p>
+                    <p>{{ book.category }}</p>
+                </div>
                 <p>{{ book.review }}</p>
-                <div class="commentbox">
-                    <input type="text" placeholder="comment.." />
-                    <div class="comments">
-                        <div class="comment" v-for="(comment, index) in book.comment" :key="index">
-                            <p>{{ comment }}</p>
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="commentbox">
+            <textarea name="comment" rows="3" placeholder="여러분의 소중한 댓글을 남겨주세요"></textarea>
+            <button>댓글 달기</button>
+            <div class="comments">
+                <div class="comment" v-for="(comment, index) in book.comment" :key="index">
+                    <p>{{ comment }}</p>
                 </div>
             </div>
         </div>
@@ -46,7 +49,7 @@ const book = ref({
         '좋은  리뷰 감사합니다.',
         '감사합니다.',
         '좋은 하루 보내세요.',
-        '좋은 하루 보내세요.ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+        '좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.',
     ],
 })
 </script>
