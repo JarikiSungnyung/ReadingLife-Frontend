@@ -1,9 +1,19 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .box {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 40px;
-    height: 88vh;
-    overflow: scroll;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .books {
@@ -12,16 +22,31 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    /* background-color: #ffede1; */
     padding: 15px;
     border-radius: 10px;
-    border: 1px solid #ffd0b7;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease-in-out;
+}
+
+.books:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .books h3 {
     font-size: 1.25rem;
+    color: #333;
+    text-align: center;
+    transition: color 0.3s ease-in-out;
+}
+
+.books h3:hover {
+    color: #ff5e62;
 }
 
 .books img {
-    width: 60%;
+    width: 80%;
+    pointer-events: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

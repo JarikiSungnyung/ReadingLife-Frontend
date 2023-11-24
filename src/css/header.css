@@ -4,7 +4,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #ff9f6a;
+    background-color: #ff6745;
     margin-bottom: 20px;
 }
 
@@ -19,7 +19,7 @@ header {
 .heads {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
 }
 
 i {
