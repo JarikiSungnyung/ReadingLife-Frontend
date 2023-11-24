@@ -22,6 +22,7 @@
 .intros {
     width: 50%;
     height: 100%;
+    overflow-y: scroll;
 }
 
 .intros h1 {
@@ -42,14 +43,10 @@
     color: gray;
 }
 
-.intro p:nth-child(4) {
-    margin-bottom: 0px;
-    max-height: 50vh;
-    overflow: scroll;
-}
-
 .intros p {
     font-size: 1.25rem;
+    margin-bottom: 0px;
+    overflow: auto;
 }
 
 .commentbox {
@@ -59,11 +56,15 @@
 .commentbox button {
     border: 1px solid #ffd0b7;
     border-radius: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0 10px 0;
     font-size: 15px;
     padding: 10px;
     background-color: #ffede1;
+    cursor: pointer;
+}
+
+.commentbox button:hover {
+    background-color: #ffe7d6;
 }
 
 .commentbox textarea {
@@ -74,6 +75,7 @@
     outline: 1px solid #ffd0b7;
     padding: 10px;
     background-color: #ffede1;
+    resize: none;
 }
 
 .comment {
