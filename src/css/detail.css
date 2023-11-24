@@ -26,6 +26,8 @@
 }
 
 .intros {
+    display: flex;
+    flex-direction: column;
     width: 50%;
     height: 100%;
     overflow-y: scroll;
@@ -49,11 +51,6 @@
 
 .intro input:nth-child(1) {
     margin: 0;
-}
-
-.intros {
-    display: flex;
-    flex-direction: column;
 }
 
 .intro input,
@@ -136,4 +133,27 @@ textarea {
 
 .commentbox textarea:focus {
     outline-color: #aaa;
+}
+
+.image-upload {
+    width: 45%;
+    border: 2px dashed #bbb;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.image-upload span {
+    color: #aaa;
+}
+
+.image-upload input[type='file'] {
+    display: none;
+}
+
+.image-upload-placeholder {
+    text-align: center;
 }

@@ -1,4 +1,8 @@
 <template>
+    <div class="search-bar">
+        <input type="text" v-model="searchTerm" placeholder="책 제목으로 검색" />
+        <button @click="onSearch">검색</button>
+    </div>
     <div class="container">
         <div class="box">
             <router-link :to="book.name" v-for="(book, index) in books" :key="index">
@@ -18,6 +22,16 @@
 
 <script setup>
 import { ref } from 'vue'
+const searchTerm = ref('')
+
+const onSearch = async () => {
+    if (!searchTerm.value) {
+        return
+    }
+    // 나중에 실제 백엔드 API 호출로 대체
+    console.log(`Backend API called with search term: ${searchTerm.value}`)
+}
+
 const books = ref([
     {
         name: '이기적 유전자',
