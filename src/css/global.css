@@ -12,17 +12,6 @@
     box-sizing: border-box;
 }
 
-.container {
-    width: 100%;
-    height: 86vh;
-    display: flex;
-    justify-content: center;
-}
-
-.box {
-    width: 70vw;
-}
-
 *::-webkit-scrollbar {
     display: none;
 }
