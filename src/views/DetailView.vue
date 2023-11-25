@@ -1,54 +1,7 @@
 <template>
     <div class="bookcontainer">
-        <div class="bookbox" v-if="!isModify">
-            <img :src="book.imgUrl" alt="bookImg" />
-            <div class="intros">
-                <div class="intro">
-                    <div class="bookname">
-                        <h1>{{ book.name }}</h1>
-                        <div class="modify">
-                            <button @click="clickModify()">수정</button>
-                            <button>삭제</button>
-                        </div>
-                    </div>
-                    <p>{{ book.author }}</p>
-                    <p>{{ book.category }}</p>
-                </div>
-                <p>{{ book.review }}</p>
-            </div>
-        </div>
-        <div class="bookbox" v-else>
-            <div class="image-upload" @dragover.prevent @drop="onDrop($event)" @click="openFileChooser">
-                <input type="file" ref="fileInput" @change="onFileChange($event)" />
-                <img v-if="previewImage" :src="previewImage" alt="preview" />
-                <div v-else class="image-upload-placeholder">
-                    <span>드래그 앤 드롭 또는 클릭하여 이미지 선택</span>
-                </div>
-            </div>
-            <div class="intros">
-                <div class="intro">
-                    <div class="bookname">
-                        <h1><input type="text" :placeholder="book.name" /></h1>
-                        <div class="modify">
-                            <button>완료</button>
-                            <button @click="clickCancel()">취소</button>
-                        </div>
-                    </div>
-                    <p><input type="text" :placeholder="book.author" /></p>
-                    <p><input type="text" :placeholder="book.category" /></p>
-                </div>
-                <p class="textarea"><textarea name="review" :placeholder="book.review"></textarea></p>
-            </div>
-        </div>
-        <div class="commentbox" v-if="!isModify">
-            <textarea name="comment" rows="3" placeholder="여러분의 소중한 댓글을 남겨주세요"></textarea>
-            <button>댓글 달기</button>
-            <div class="comments">
-                <div class="comment" v-for="(comment, index) in book.comment" :key="index">
-                    <p>{{ comment }}</p>
-                </div>
-            </div>
-        </div>
+        <BookDetail v-if="!isModify" :book="book" :isModify="isModify" @clickModify="isModify = true" />
+        <BookEdit v-else :book="book" :isModify="isModify" @clickCancel="isModify = false" />
     </div>
 </template>
 
@@ -59,32 +12,10 @@
 
 <script setup>
 import { ref } from 'vue'
-const previewImage = ref(null)
-const fileInput = ref(null)
+import BookDetail from '../components/BookDetail.vue'
+import BookEdit from '../components/BookEdit.vue'
+
 let isModify = ref(false)
-
-const openFileChooser = () => {
-    fileInput.value.click()
-}
-
-const onFileChange = (e) => {
-    const file = e.target.files[0]
-    previewImage.value = URL.createObjectURL(file)
-}
-
-const onDrop = (e) => {
-    e.preventDefault()
-    const file = e.dataTransfer.files[0]
-    previewImage.value = URL.createObjectURL(file)
-}
-
-const clickModify = () => {
-    isModify.value = true
-}
-
-const clickCancel = () => {
-    isModify.value = false
-}
 
 const book = ref({
     name: '이기적 유전자',
