@@ -33,13 +33,24 @@
     /* padding: 20px; */
 }
 
-.intros h1 {
+.edits {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    /* padding: 20px; */
+}
+
+.intros h1,
+.edits h1 {
     font-size: 2rem;
     font-weight: bold;
 }
 
 .intro p,
-.intro input {
+.intro input,
+.edits p,
+.edits input {
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
@@ -53,7 +64,9 @@
 }
 
 .intro input,
-.intros > p > textarea {
+.intros > p > textarea,
+.edit input,
+.edits > p > textarea {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -61,8 +74,13 @@
     box-sizing: border-box;
 }
 
+p.textarea {
+    margin-bottom: 0;
+}
+
 .intro input:focus,
-.intros > p > textarea:focus {
+.intros > p > textarea:focus .edit input:focus,
+.edits > p > textarea:focus {
     outline: none;
     border-color: #aaa;
 }

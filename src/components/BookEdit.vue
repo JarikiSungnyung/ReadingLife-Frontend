@@ -7,8 +7,8 @@
                 <span>드래그 앤 드롭 또는 클릭하여 이미지 선택</span>
             </div>
         </div>
-        <div class="intros">
-            <div class="intro">
+        <div class="edits">
+            <div class="edit">
                 <div class="bookname">
                     <h1><input type="text" :placeholder="props.book.name" /></h1>
                     <div class="modify">
