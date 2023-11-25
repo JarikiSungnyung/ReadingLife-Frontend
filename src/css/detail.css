@@ -79,7 +79,8 @@ p.textarea {
 }
 
 .intro input:focus,
-.intros > p > textarea:focus .edit input:focus,
+.intros > p > textarea:focus,
+.edit input:focus,
 .edits > p > textarea:focus {
     outline: none;
     border-color: #aaa;
