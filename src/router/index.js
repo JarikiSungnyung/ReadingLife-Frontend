@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import DetailView from '../views/DetailView'
 import IntroView from '../views/IntroView.vue'
+import WriteView from '../views/WriteView.vue'
 
 const routes = [
     {
@@ -13,6 +14,11 @@ const routes = [
         path: '/intro',
         name: 'intro',
         component: IntroView,
+    },
+    {
+        path: '/create',
+        name: 'create',
+        component: WriteView,
     },
     {
         path: '/:book',
