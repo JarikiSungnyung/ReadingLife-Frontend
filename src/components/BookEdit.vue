@@ -12,7 +12,7 @@
                 <div class="bookname">
                     <h1><input type="text" :placeholder="props.book.name" /></h1>
                     <div class="modify">
-                        <button>완료</button>
+                        <button @click="clickComplete">완료</button>
                         <button @click="clickCancel">취소</button>
                     </div>
                 </div>
@@ -26,20 +26,16 @@
 
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
-const emit = defineEmits(['clickCancel'])
 
 const props = defineProps({
     isModify: Boolean,
     book: Object,
-    clickCancel: Function,
 })
+
+const emit = defineEmits(['clickComplete', 'clickCancel'])
 
 const previewImage = ref(null)
 const fileInput = ref(null)
-
-const clickCancel = () => {
-    emit('clickCancel')
-}
 
 const openFileChooser = () => {
     fileInput.value.click()
@@ -54,5 +50,13 @@ const onDrop = (e) => {
     e.preventDefault()
     const file = e.dataTransfer.files[0]
     previewImage.value = URL.createObjectURL(file)
+}
+
+const clickComplete = () => {
+    emit('clickComplete')
+}
+
+const clickCancel = () => {
+    emit('clickCancel')
 }
 </script>

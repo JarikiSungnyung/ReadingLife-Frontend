@@ -7,7 +7,7 @@
                     <h1>{{ props.book.name }}</h1>
                     <div class="modify">
                         <button @click="clickModify">수정</button>
-                        <button>삭제</button>
+                        <button @click="clickDelete">삭제</button>
                     </div>
                 </div>
                 <p>{{ props.book.author }}</p>
@@ -29,7 +29,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
-const emit = defineEmits(['clickModify'])
+const emit = defineEmits(['clickModify', 'clickDelete'])
 
 const props = defineProps({
     isModify: Boolean,
@@ -39,5 +39,9 @@ const props = defineProps({
 
 const clickModify = () => {
     emit('clickModify')
+}
+
+const clickDelete = () => {
+    emit('clickDelete')
 }
 </script>

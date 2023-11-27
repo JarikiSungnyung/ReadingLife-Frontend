@@ -13,8 +13,8 @@
                     <div class="bookname">
                         <h1><input type="text" placeholder="제목" /></h1>
                         <div class="modify">
-                            <button>완료</button>
-                            <button @click="clickCancel()">취소</button>
+                            <button @click="openCompleteModal">완료</button>
+                            <button @click="openCancelModal">취소</button>
                         </div>
                     </div>
                     <p><input type="text" placeholder="저자" /></p>
@@ -24,6 +24,23 @@
             </div>
         </div>
     </div>
+    <Modal v-if="isCompleteModalOpen" @close="closeCompleteModal" @confirm="completeReview" @cancel="closeCompleteModal">
+        <template #question>
+            <h2>완료하시겠습니까?</h2>
+        </template>
+        <template #details>
+            <p>리뷰 내용은 추후에 수정할 수 있습니다.</p>
+        </template>
+    </Modal>
+
+    <Modal v-if="isCancelModalOpen" @close="closeCancelModal" @confirm="cancelReview" @cancel="closeCancelModal">
+        <template #question>
+            <h2>취소하시겠습니까?</h2>
+        </template>
+        <template #details>
+            <p>취소하면 모든 변경 사항을 잃게 됩니다.</p>
+        </template>
+    </Modal>
 </template>
 
 <style scoped>
@@ -34,13 +51,38 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import Modal from '../components/ModalItem.vue'
 
 const router = useRouter()
 const previewImage = ref(null)
 const fileInput = ref(null)
+const isCompleteModalOpen = ref(false)
+const isCancelModalOpen = ref(false)
 
-const clickCancel = () => {
-    router.go(-1)
+const openCompleteModal = () => {
+    isCompleteModalOpen.value = true
+}
+
+const openCancelModal = () => {
+    isCancelModalOpen.value = true
+}
+
+const closeCompleteModal = () => {
+    isCompleteModalOpen.value = false
+}
+
+const closeCancelModal = () => {
+    isCancelModalOpen.value = false
+}
+
+const completeReview = () => {
+    console.log('added')
+    router.push('/')
+}
+
+const cancelReview = () => {
+    console.log('cancelled')
+    router.push('/')
 }
 
 const openFileChooser = () => {

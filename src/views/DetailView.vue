@@ -1,8 +1,18 @@
 <template>
     <div class="bookcontainer">
-        <BookDetail v-if="!isModify" :book="book" :isModify="isModify" @clickModify="isModify = true" />
-        <BookEdit v-else :book="book" :isModify="isModify" @clickCancel="isModify = false" />
+        <BookDetail v-if="!isModify" :book="book" :isModify="isModify" @clickModify="isModify = true" @clickDelete="openModal('정말 삭제하시겠습니까?', '삭제한 리뷰는 복구할 수 없습니다.', 'deleted')" />
+        <BookEdit
+            v-else
+            :book="book"
+            :isModify="isModify"
+            @clickComplete="openModal('정말 완료하시겠습니까?', '수정된 정보는 복구할 수 없습니다.', 'modified')"
+            @clickCancel="openModal('정말 취소하시겠습니까?', '취소하시면 모든 변경 사항을 잃게됩니다.', 'cancelled')"
+        />
     </div>
+    <ConfirmModal v-if="isModalOpen" @confirm="confirm" @cancel="cancel">
+        <template #question>{{ modalContent.title }}</template>
+        <template #details>{{ modalContent.details }}</template>
+    </ConfirmModal>
 </template>
 
 <style scoped>
@@ -12,10 +22,29 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import BookDetail from '../components/BookDetail.vue'
 import BookEdit from '../components/BookEdit.vue'
+import ConfirmModal from '../components/ModalItem.vue'
 
+const router = useRouter()
 let isModify = ref(false)
+let isModalOpen = ref(false)
+let modalContent = ref({ title: '', details: '', action: '' })
+
+const openModal = (title, details, action) => {
+    modalContent.value = { title, details, action }
+    isModalOpen.value = true
+}
+
+const confirm = () => {
+    console.log(modalContent.value.action)
+    router.push('/')
+}
+
+const cancel = () => {
+    isModalOpen.value = false
+}
 
 const book = ref({
     name: '이기적 유전자',
