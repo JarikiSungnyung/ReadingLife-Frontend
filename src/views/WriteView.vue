@@ -11,16 +11,16 @@
             <div class="edits">
                 <div class="edit">
                     <div class="bookname">
-                        <h1><input type="text" placeholder="제목" /></h1>
+                        <h1><input type="text" v-model="title" placeholder="제목" /></h1>
                         <div class="modify">
                             <button @click="openCompleteModal">완료</button>
                             <button @click="openCancelModal">취소</button>
                         </div>
                     </div>
-                    <p><input type="text" placeholder="저자" /></p>
-                    <p><input type="text" placeholder="카테고리" /></p>
+                    <p><input type="text" v-model="author" placeholder="저자" /></p>
+                    <p><input type="text" v-model="category" placeholder="카테고리" /></p>
                 </div>
-                <p class="textarea"><textarea name="review" placeholder="리뷰"></textarea></p>
+                <p class="textarea"><textarea name="review" v-model="review" placeholder="리뷰"></textarea></p>
             </div>
         </div>
     </div>
@@ -51,6 +51,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios' // axios import
 import Modal from '../components/ModalItem.vue'
 
 const router = useRouter()
@@ -58,6 +59,11 @@ const previewImage = ref(null)
 const fileInput = ref(null)
 const isCompleteModalOpen = ref(false)
 const isCancelModalOpen = ref(false)
+const title = ref('')
+const author = ref('')
+const category = ref('')
+const review = ref('')
+const file = ref(null) // 파일을 저장할 ref 추가
 
 const openCompleteModal = () => {
     isCompleteModalOpen.value = true
@@ -75,8 +81,19 @@ const closeCancelModal = () => {
     isCancelModalOpen.value = false
 }
 
-const completeReview = () => {
-    console.log('added')
+const completeReview = async () => {
+    const formData = new FormData()
+
+    formData.append('img', file.value)
+    formData.append('name', title.value)
+    formData.append('author', author.value)
+    formData.append('category', category.value)
+    formData.append('review', review.value)
+
+    const response = await axios.post('http://localhost:3000/create', formData)
+
+    console.log(response.data)
+
     router.push('/')
 }
 
@@ -90,13 +107,15 @@ const openFileChooser = () => {
 }
 
 const onFileChange = (e) => {
-    const file = e.target.files[0]
-    previewImage.value = URL.createObjectURL(file)
+    const fileObj = e.target.files[0] // 변수 이름 변경
+    previewImage.value = URL.createObjectURL(fileObj)
+    file.value = fileObj // 파일 저장
 }
 
 const onDrop = (e) => {
     e.preventDefault()
-    const file = e.dataTransfer.files[0]
-    previewImage.value = URL.createObjectURL(file)
+    const fileObj = e.dataTransfer.files[0] // 변수 이름 변경
+    previewImage.value = URL.createObjectURL(fileObj)
+    file.value = fileObj // 파일 저장
 }
 </script>

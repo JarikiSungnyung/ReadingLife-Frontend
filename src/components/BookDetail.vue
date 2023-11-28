@@ -1,6 +1,6 @@
 <template>
     <div class="bookbox">
-        <img :src="props.book.imgUrl" alt="bookImg" />
+        <img :src="props.book.img_path" alt="bookImg" />
         <div class="intros">
             <div class="intro">
                 <div class="bookname">
@@ -17,10 +17,10 @@
         </div>
     </div>
     <div class="commentbox">
-        <textarea name="comment" rows="3" placeholder="여러분의 소중한 댓글을 남겨주세요"></textarea>
-        <button>댓글 달기</button>
+        <textarea name="comment" rows="3" placeholder="여러분의 소중한 댓글을 남겨주세요" v-model="comment"></textarea>
+        <button @click="addComment">댓글 달기</button>
         <div class="comments">
-            <div class="comment" v-for="(comment, index) in props.book.comment" :key="index">
+            <div class="comment" v-for="(comment, index) in props.book.comments" :key="index">
                 <p>{{ comment }}</p>
             </div>
         </div>
@@ -28,8 +28,11 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { defineProps, defineEmits } from 'vue'
-const emit = defineEmits(['clickModify', 'clickDelete'])
+import axios from 'axios'
+
+const emit = defineEmits(['clickModify', 'clickDelete', 'commentAdded'])
 
 const props = defineProps({
     isModify: Boolean,
@@ -37,11 +40,24 @@ const props = defineProps({
     clickModify: Function,
 })
 
+const comment = ref('')
+
 const clickModify = () => {
     emit('clickModify')
 }
 
 const clickDelete = () => {
     emit('clickDelete')
+}
+
+const addComment = async () => {
+    try {
+        const encodedBookName = encodeURIComponent(props.book.name)
+        await axios.post(`http://localhost:3000/comment/${encodedBookName}`, { comment: comment.value })
+        comment.value = ''
+        emit('commentAdded')
+    } catch (error) {
+        console.error(error)
+    }
 }
 </script>

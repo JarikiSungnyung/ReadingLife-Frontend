@@ -1,11 +1,11 @@
 <template>
     <div class="bookcontainer">
-        <BookDetail v-if="!isModify" :book="book" :isModify="isModify" @clickModify="isModify = true" @clickDelete="openModal('정말 삭제하시겠습니까?', '삭제한 리뷰는 복구할 수 없습니다.', 'deleted')" />
+        <BookDetail v-if="!isModify" :book="book" :isModify="isModify" @clickModify="isModify = true" @clickDelete="openModal('정말 삭제하시겠습니까?', '삭제한 리뷰는 복구할 수 없습니다.', 'deleted')" @commentAdded="fetchBook" />
         <BookEdit
             v-else
             :book="book"
             :isModify="isModify"
-            @clickComplete="openModal('정말 완료하시겠습니까?', '수정된 정보는 복구할 수 없습니다.', 'modified')"
+            @clickComplete="openModalWithData('정말 완료하시겠습니까?', '수정된 정보는 복구할 수 없습니다.', 'modified', $event)"
             @clickCancel="openModal('정말 취소하시겠습니까?', '취소하시면 모든 변경 사항을 잃게됩니다.', 'cancelled')"
         />
     </div>
@@ -21,8 +21,9 @@
 </style>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import BookDetail from '../components/BookDetail.vue'
 import BookEdit from '../components/BookEdit.vue'
 import ConfirmModal from '../components/ModalItem.vue'
@@ -31,41 +32,65 @@ const router = useRouter()
 let isModify = ref(false)
 let isModalOpen = ref(false)
 let modalContent = ref({ title: '', details: '', action: '' })
+let book = ref({})
+
+const fetchBook = async () => {
+    const bookName = router.currentRoute.value.params.book
+    try {
+        const response = await axios.get(`http://localhost:3000/${bookName}`)
+        book.value = response.data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+onMounted(fetchBook)
 
 const openModal = (title, details, action) => {
     modalContent.value = { title, details, action }
     isModalOpen.value = true
 }
 
-const confirm = () => {
-    console.log(modalContent.value.action)
-    router.push('/')
+const openModalWithData = (title, details, action, data) => {
+    modalContent.value = { title, details, action, data }
+    isModalOpen.value = true
+}
+
+const confirmDelete = async () => {
+    try {
+        const encodedBookName = encodeURIComponent(book.value.name)
+        await axios.delete(`http://localhost:3000/${encodedBookName}`)
+        router.push('/')
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const confirmEdit = async (data) => {
+    try {
+        const encodedBookName = encodeURIComponent(book.value.name)
+        await axios.put(`http://localhost:3000/${encodedBookName}`, data)
+        console.log('Book successfully updated')
+        await fetchBook()
+        router.push('/')
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const confirm = async () => {
+    if (modalContent.value.action === 'deleted') {
+        await confirmDelete()
+    } else if (modalContent.value.action === 'modified') {
+        await confirmEdit(modalContent.value.data)
+    } else if (modalContent.value.action === 'cancelled') {
+        cancel()
+        isModify.value = false
+        await fetchBook()
+    }
 }
 
 const cancel = () => {
     isModalOpen.value = false
 }
-
-const book = ref({
-    name: '이기적 유전자',
-    imgUrl: 'https://i.namu.wiki/i/UxD_9cOzH9CXx7S3ySYRLNGbvj6jAQu7U3BBZeJqkmHeakkld0gg7QBLf7VAbT19oSebiELjKjG3XL6KsTnmjxwDtMdZcNI5ktId8p4E8VZm37PL1AQjp8SZQdAQKv97c2msx04vYJDj_CTNyhkEekyAE67N6twYXIzmlWUk1Vo.webp',
-    category: '국내도서 > 자연과학 > 생명과학 > 유전자/진화/바이러스',
-    author: '리처드 도킨스',
-    review: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    comment: [
-        '좋은  리뷰 감사합니다.',
-        '감사합니다.',
-        '좋은 하루 보내세요.',
-        '좋은  리뷰 감사합니다.',
-        '감사합니다.',
-        '좋은 하루 보내세요.',
-        '좋은  리뷰 감사합니다.',
-        '감사합니다.',
-        '좋은 하루 보내세요.',
-        '좋은  리뷰 감사합니다.',
-        '감사합니다.',
-        '좋은 하루 보내세요.',
-        '좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.좋은 하루 보내세요.',
-    ],
-})
 </script>
