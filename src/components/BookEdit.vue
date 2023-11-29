@@ -57,9 +57,11 @@ const onDrop = (e) => {
 
 const clickComplete = async () => {
     const formData = new FormData()
+    let isEmpty = true
 
     const file = fileInput.value.files[0]
     if (file) {
+        isEmpty = false
         formData.append('img', file)
     }
     const inputs = document.querySelectorAll('input')
@@ -67,6 +69,7 @@ const clickComplete = async () => {
         if (input.type == 'file') {
             return
         } else if (input.value) {
+            isEmpty = false
             formData.append(input.name, input.value)
         } else {
             formData.append(input.name, input.placeholder)
@@ -75,9 +78,15 @@ const clickComplete = async () => {
 
     const textarea = document.querySelector('textarea')
     if (textarea.value) {
+        isEmpty = false
         formData.append(textarea.name, textarea.value)
     } else {
         formData.append(textarea.name, textarea.placeholder)
+    }
+
+    if (isEmpty) {
+        alert('변경사항이 없습니다.')
+        return
     }
 
     emit('clickComplete', formData)

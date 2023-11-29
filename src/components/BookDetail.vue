@@ -51,6 +51,9 @@ const clickDelete = () => {
 }
 
 const addComment = async () => {
+    if (!comment.value) {
+        return
+    }
     try {
         const encodedBookName = encodeURIComponent(props.book.name)
         await axios.post(`http://localhost:3000/comment/${encodedBookName}`, { comment: comment.value })
