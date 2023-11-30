@@ -56,7 +56,7 @@ const addComment = async () => {
     }
     try {
         const encodedBookName = encodeURIComponent(props.book.name)
-        await axios.post(`http://localhost:3000/comment/${encodedBookName}`, { comment: comment.value })
+        await axios.post(`${process.env.VUE_APP_BACKEND_URL}/comment/${encodedBookName}`, { comment: comment.value })
         comment.value = ''
         emit('commentAdded')
     } catch (error) {

@@ -37,7 +37,7 @@ let book = ref({})
 const fetchBook = async () => {
     const bookName = router.currentRoute.value.params.book
     try {
-        const response = await axios.get(`http://localhost:3000/${bookName}`)
+        const response = await axios.get(`${process.env.VUE_APP_BACKEND_URL}/${bookName}`)
         book.value = response.data
     } catch (error) {
         console.error(error)
@@ -59,7 +59,7 @@ const openModalWithData = (title, details, action, data) => {
 const confirmDelete = async () => {
     try {
         const encodedBookName = encodeURIComponent(book.value.name)
-        await axios.delete(`http://localhost:3000/${encodedBookName}`)
+        await axios.delete(`${process.env.VUE_APP_BACKEND_URL}/${encodedBookName}`)
         router.push('/')
     } catch (error) {
         console.error(error)
@@ -69,7 +69,7 @@ const confirmDelete = async () => {
 const confirmEdit = async (data) => {
     try {
         const encodedBookName = encodeURIComponent(book.value.name)
-        await axios.put(`http://localhost:3000/${encodedBookName}`, data)
+        await axios.put(`${process.env.VUE_APP_BACKEND_URL}/${encodedBookName}`, data)
         console.log('Book successfully updated')
         await fetchBook()
         router.push('/')

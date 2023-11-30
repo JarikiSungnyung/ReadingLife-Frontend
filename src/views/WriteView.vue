@@ -90,7 +90,7 @@ const completeReview = async () => {
     formData.append('category', category.value)
     formData.append('review', review.value)
 
-    const response = await axios.post('http://localhost:3000/create', formData)
+    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/create`, formData)
 
     console.log(response.data)
 
