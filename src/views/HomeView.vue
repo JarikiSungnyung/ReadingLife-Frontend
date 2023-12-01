@@ -30,7 +30,6 @@ const Books = ref([])
 
 const fetchBooks = async () => {
     try {
-        console.log(`${process.env.VUE_APP_BACKEND_URL}`)
         const response = await axios.get(`${process.env.VUE_APP_BACKEND_URL}`)
         firstBooks.value = response.data
         Books.value = [...firstBooks.value]
